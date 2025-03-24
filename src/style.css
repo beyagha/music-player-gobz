@@ -47,3 +47,18 @@ button {
   position: absolute;
   cursor: pointer;
 }
+#my-music-container{
+  display: flex;
+  gap: 20px;
+  width:fit-content;
+}
+li{
+  width: 200px ;
+  height: 200px;
+
+}
+video{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
