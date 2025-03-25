@@ -23,6 +23,8 @@ class MusicPlayer {
       { id: 12, title: "Still with you", url: "/mp3/track12.mp3", name: "Jungkook", img: "/webm/12.webm" },
       { id: 13, title: "Focus", url: "/mp3/track13.mp3", name: "HER", img: "/webm/13.webm" }
     ];
+    this.scrollY = 0;
+    this.gap = 20;
     this.currentTrackIndex = 0; // Bug: En général, les tableaux commencent à 0
     this.audio = new Audio();
     this.isPlaying = false;
@@ -42,18 +44,53 @@ class MusicPlayer {
     this.textAnimation();
     this.createMusic();
     this.setupDraggable();
-    this.onClickVideoStart()
+    this.setUpImages();
+    this.updatePositions();
+    this.initScroll();
   }
+  setUpImages() {
+    this.allImages = document.querySelectorAll(".music-img");
+    this.coverSize = this.allImages[0].getBoundingClientRect().width;
+    console.log(this.coverSize);
+    console.log(this.allImages.length);
+    this.containerSize = this.allImages.length * (this.gap + this.coverSize);
+    this.initialValue = this.coverSize+ this.gap
 
+    // array.forEach(i => {
+
+    // });
+  }
+  updatePositions() {
+    this.tracks.forEach((track, index) => {
+      track.elementVideo.style.left = `${- this.initialValue + (index * ((this.coverSize + this.gap)+ this.scrollY + this.containerSize))%this.containerSize}px`
+
+    });
+  }
+  initScroll() {
+    document.addEventListener("wheel", this.onScroll.bind(this))
+  }
+  onScroll(e) {
+    this.scrollY += e.wheelDeltaY
+    console.log(this.scrollY)
+    this.updatePositions();
+  }
   createMusic() {
     let myMusicContainer = document.getElementById("my-music-container");
+    let listVideos = [];
     for (let i = 0; i < this.tracks.length; i++) {
       const music = this.tracks[i];
       let musicImg = document.createElement("li")
-      musicImg.innerHTML = "<video src='" + music.img + "'></video>"
-      musicImg.id = "music-img";
+      let musicVideo = document.createElement("video")
+      musicVideo.src = music.img;
+      listVideos.push(musicVideo)
+      musicImg.classList.add("music-img");
       myMusicContainer.appendChild(musicImg)
+      musicImg.appendChild(musicVideo)
+      this.tracks[i].elementVideo = musicImg
     }
+    listVideos.forEach(element => {
+      console.log(element);
+    });
   }
   // changeTitleSongToName() {
   //   // const title = document.getElementById('track-title');
@@ -66,13 +103,14 @@ class MusicPlayer {
   // }
   // }
   textAnimation() {
-    const tl = gsap.timeline({delay: 0.5,repeat: -1});
-    tl.to(this.trackTitle, { y: "10vh", duration: 1});
-    tl.to(this.trackTitle,{ duration: 2, opacity: 0 });
-    tl.to(this.trackName,{ y: "10vh", duration: 1, opacity: 1 });
-    tl.to(this.trackName,{duration: 2, opacity: 0 });
-    
-    
+    const tl = gsap.timeline({ delay: 0.5, repeat: -1 });
+    tl.to(this.trackTitle, { y: "10vh", duration: 1 });
+    tl.to(this.trackTitle, { duration: 2, opacity: 0 });
+    tl.to(this.trackName, { y: "10vh", duration: 1, opacity: 1 });
+    tl.to(this.trackName, { duration: 2, opacity: 0 });
+
+
+
   }
 
   cacheDOM() {
@@ -82,7 +120,8 @@ class MusicPlayer {
     this.prevButton = document.querySelector("#prev");
     this.trackTitle = document.querySelector("#track-title");
     this.trackName = document.querySelector("#track-name");
-    this.trackVideo = document.querySelector("#music-img");
+    this.trackVideo = document.querySelector("#videoBg");
+
   }
 
   bindEvents() {
@@ -90,7 +129,6 @@ class MusicPlayer {
     this.nextButton.addEventListener("click", () => this.nextTrack());
     this.prevButton.addEventListener("click", () => this.prevTrack());
     this.audio.addEventListener("ended", () => this.nextTrack());
-    this.trackVideo.addEventListener("click",onClickVideoStart());
   }
 
   loadTrack() {
@@ -100,10 +138,8 @@ class MusicPlayer {
     }
     this.audio.src = this.tracks[this.currentTrackIndex].url;
     this.trackTitle.textContent = this.tracks[this.currentTrackIndex].title;
-    // this.changeTitleSongToName();
     this.trackName.textContent = this.tracks[this.currentTrackIndex].name;
-    // this.animateTitle();
-    // this.togglePlay();
+    this.video = this.tracks[this.currentTrackIndex].img;
   }
   togglePlay() {
     if (this.isPlaying) {
@@ -123,6 +159,7 @@ class MusicPlayer {
     this.loadTrack();
     this.audio.play();
     this.isPlaying = true;
+    this.trackVideo.src = this.tracks[this.currentTrackIndex].img
   }
 
   prevTrack() {
@@ -130,14 +167,15 @@ class MusicPlayer {
     this.loadTrack();
     this.audio.play();
     this.isPlaying = true;
+    this.trackVideo.src = this.tracks[this.currentTrackIndex].img
   }
   setupDraggable() {
     Draggable.create("#my-music-container", { type: "x" });
   }
-  onClickVideoStart(){
-    this.tracks[this.currentTrackIndex].img
-    
-  }
+  // onClickVideoStart(){
+  //   const video = this.tracks[this.currentTrackIndex].img;
+  //   video.play();
+  // }
 }
 new MusicPlayer();
 
