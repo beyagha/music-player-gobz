@@ -9,18 +9,24 @@
 </head>
 
 <body>
-    <h1>Lecteur de Playlist</h1>
-    <div>
-        <button id="prev">⏮ Précédent</button>
-        <button id="play">▶️ Play / Pause</button>
-        <button id="next">⏭ Suivant</button>
+    <div class="container">
+        <h1></h1>
+        <div id="button-container">
+            <img class="button" id="prev" src="/public/button/button-prev.svg" alt="">
+            <!-- <button id="prev">⏮ Précédent</button> -->
+            <img class="button" id="play" src="/public/button/pause.png" alt="">
+            <!-- <button id="play">▶️ Play / Pause</button> -->
+            <img class="button" id="next" src="/public/button/button-next.svg" alt="">
+            <!-- <button id="next">⏭ Suivant</button> -->
+        </div>
+        <div class="track-name-container">
+            <h2 class="trackPosition" id="track-title">Titre du morceau</h2>
+            <h2 class="trackPosition" id="track-name">Titre du morceau</h2>
+        </div>
+        <ul id="playlist"></ul>
+        <ul id="my-music-container"></ul>
     </div>
-    <h2 id="track-title">Titre du morceau</h2>
-    <h2 id="track-name">Titre du morceau</h2>
-    
-    <ul id="playlist"></ul>
-    <ul id="my-music-container" ></ul>
-    <script src="./src/main.js"></script>
+    <script type="module" src="./src/main.js"></script>
 </body>
 
 </html>

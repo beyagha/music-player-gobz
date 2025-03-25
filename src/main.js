@@ -1,34 +1,34 @@
-import {gsap} from "gsap";
-gsap.registerPlugin(Draggable)
-
+import { gsap } from "gsap";
+import Draggable from "gsap/Draggable";
+gsap.registerPlugin(Draggable);
+// gsap.registerPlugin(SplitText);
 class MusicPlayer {
-  
+
   // Explication : Le constructeur est la première fonction lancée quand la Classe est instanciée. On y initialise les propriété, et appelle des fonctions.
   constructor() {
-    console.log('ok ?');
     // TODO DRAGGABLE : On va vouloir ajouter une propriété "img" à chaque objet, et y inscrire le lien de l'image que l'on veut charger. 
     // Pense bien à mettre tes images dans le dossier "public"
     this.tracks = [
-      { id: 1, title: "BATH", name:"OFFONOFF" , url: "/mp3/track.mp3", img:"/webm/1.webm"  },
-      { id: 2, title: "Doughnught",name:"Twice", url: "/mp3/track2.mp3" , img:"/webm/2.webm" },
-      { id: 3, title: "Fairy of Shampoo",name:"Dosii", url: "/mp3/track3.mp3" , img:"/webm/3.webm" },
-      { id: 4, title: "What you wont do for love",name:'Bobby Caldwell' , url: "/mp3/track4.mp3" , img: "/webm/4.webm"},
-      { id: 5, title: "Can't Keep Holding back my love",name:"Odyssey", url: "/mp3/track5.mp3" , img: "/webm/5.webm"},
-      { id: 6, title: "Smooth operator", url: "/mp3/track6.mp3", name:"Sade" , img: "/webm/6.webm"},
-      { id: 7, title: "Instagram", url: "/mp3/track7.mp3" ,name:"DEAN", img:"/webm/7.webm" },
-      { id: 8, title: "Dress down", url: "/mp3/track8.mp3",name:"Kaoru Akimoto", img: "/webm/8.webm" },
-      { id: 9, title: "Last Summer Whisper", url: "/mp3/track9.mp3" ,name:"Anri", img:"/webm/9.webm" },
-      { id: 10, title: "Plastic love", url: "/mp3/track10.mp3",name:'Mariya Takeuchi' , img:"/webm/10.webm" },
-      { id: 11, title: "Midnight Pretenders", url: "/mp3/track11.mp3", name:"Tomoko Aran" , img:"/webm/11.webm" },
-      { id: 12, title: "Still with you", url: "/mp3/track12.mp3",name:"Jungkook", img:"/webm/12.webm" }
+      { id: 1, title: "BATH", name: "OFFONOFF", url: "/mp3/track.mp3", img: "/webm/1.webm" },
+      { id: 2, title: "Doughnught", name: "Twice", url: "/mp3/track2.mp3", img: "/webm/2.webm" },
+      { id: 3, title: "Fairy of Shampoo", name: "Dosii", url: "/mp3/track3.mp3", img: "/webm/3.webm" },
+      { id: 4, title: "What you wont do for love", name: 'Bobby Caldwell', url: "/mp3/track4.mp3", img: "/webm/4.webm" },
+      { id: 5, title: "Can't Keep Holding back my love", name: "Odyssey", url: "/mp3/track5.mp3", img: "/webm/5.webm" },
+      { id: 6, title: "Smooth operator", url: "/mp3/track6.mp3", name: "Sade", img: "/webm/6.webm" },
+      { id: 7, title: "Instagram", url: "/mp3/track7.mp3", name: "DEAN", img: "/webm/7.webm" },
+      { id: 8, title: "Dress down", url: "/mp3/track8.mp3", name: "Kaoru Akimoto", img: "/webm/8.webm" },
+      { id: 9, title: "Last Summer Whisper", url: "/mp3/track9.mp3", name: "Anri", img: "/webm/9.webm" },
+      { id: 10, title: "Plastic love", url: "/mp3/track10.mp3", name: 'Mariya Takeuchi', img: "/webm/10.webm" },
+      { id: 11, title: "Midnight Pretenders", url: "/mp3/track11.mp3", name: "Tomoko Aran", img: "/webm/11.webm" },
+      { id: 12, title: "Still with you", url: "/mp3/track12.mp3", name: "Jungkook", img: "/webm/12.webm" },
+      { id: 13, title: "Focus", url: "/mp3/track13.mp3", name: "HER", img: "/webm/13.webm" }
     ];
     this.currentTrackIndex = 0; // Bug: En général, les tableaux commencent à 0
     this.audio = new Audio();
     this.isPlaying = false;
     this.volume = 0.5;
     this.init();
-    this.createMusic();
-    this.setupDraggable();
+
   }
 
 
@@ -39,17 +39,40 @@ class MusicPlayer {
     this.cacheDOM();
     this.bindEvents();
     this.loadTrack();
+    this.textAnimation();
+    this.createMusic();
+    this.setupDraggable();
+    this.onClickVideoStart()
   }
 
-  createMusic(){
+  createMusic() {
     let myMusicContainer = document.getElementById("my-music-container");
     for (let i = 0; i < this.tracks.length; i++) {
       const music = this.tracks[i];
       let musicImg = document.createElement("li")
-      musicImg.innerHTML = "<video src='" + music.img +"'></video>"
+      musicImg.innerHTML = "<video src='" + music.img + "'></video>"
       musicImg.id = "music-img";
       myMusicContainer.appendChild(musicImg)
     }
+  }
+  // changeTitleSongToName() {
+  //   // const title = document.getElementById('track-title');
+  //   let loop= true;
+  //   while (loop = true) {
+  //     this.trackTitle.innerHTML = this.tracks[this.currentTrackIndex].trackTitle;
+  //     setTimeout(function(){ title.innerHTML = this.tracks[this.currentTrackIndex].name; }, 2000);
+  //     setTimeout(function(){ title.innerHTML = this.tracks[this.currentTrackIndex].trackTitle; }, 4000);
+  //     ; 
+  // }
+  // }
+  textAnimation() {
+    const tl = gsap.timeline({delay: 0.5,repeat: -1});
+    tl.to(this.trackTitle, { y: "10vh", duration: 1});
+    tl.to(this.trackTitle,{ duration: 2, opacity: 0 });
+    tl.to(this.trackName,{ y: "10vh", duration: 1, opacity: 1 });
+    tl.to(this.trackName,{duration: 2, opacity: 0 });
+    
+    
   }
 
   cacheDOM() {
@@ -59,6 +82,7 @@ class MusicPlayer {
     this.prevButton = document.querySelector("#prev");
     this.trackTitle = document.querySelector("#track-title");
     this.trackName = document.querySelector("#track-name");
+    this.trackVideo = document.querySelector("#music-img");
   }
 
   bindEvents() {
@@ -66,6 +90,7 @@ class MusicPlayer {
     this.nextButton.addEventListener("click", () => this.nextTrack());
     this.prevButton.addEventListener("click", () => this.prevTrack());
     this.audio.addEventListener("ended", () => this.nextTrack());
+    this.trackVideo.addEventListener("click",onClickVideoStart());
   }
 
   loadTrack() {
@@ -73,8 +98,9 @@ class MusicPlayer {
       console.error("Index de piste invalide");
       return;
     }
-    this.audio.src = this.tracks[this.currentTrackIndex].url; 
+    this.audio.src = this.tracks[this.currentTrackIndex].url;
     this.trackTitle.textContent = this.tracks[this.currentTrackIndex].title;
+    // this.changeTitleSongToName();
     this.trackName.textContent = this.tracks[this.currentTrackIndex].name;
     // this.animateTitle();
     // this.togglePlay();
@@ -105,7 +131,13 @@ class MusicPlayer {
     this.audio.play();
     this.isPlaying = true;
   }
-  setupDraggable(){}
+  setupDraggable() {
+    Draggable.create("#my-music-container", { type: "x" });
+  }
+  onClickVideoStart(){
+    this.tracks[this.currentTrackIndex].img
+    
+  }
 }
 new MusicPlayer();
 

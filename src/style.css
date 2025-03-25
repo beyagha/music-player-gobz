@@ -1,6 +1,27 @@
+@font-face {
+  font-family: powerpuff;
+  src: url(/public/font/powerpuff\ girls\ font.ttf);
+}
+
 body {
-  font-family: Arial, sans-serif;
   padding: 20px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: pink;
+
+}
+
+h2 {
+  font-family: powerpuff;
+  font-size: 50px;
+  text-align: center;
+}
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
 }
 
 ul {
@@ -26,7 +47,7 @@ button {
 
 #track-title {
   font-weight: bold;
-  margin-top: 20px;
+
 }
 
 .hidden {
@@ -47,18 +68,54 @@ button {
   position: absolute;
   cursor: pointer;
 }
-#my-music-container{
+
+#my-music-container {
   display: flex;
   gap: 20px;
-  width:fit-content;
+  width: fit-content;
+  position: absolute;
+  bottom: 10%;
 }
-li{
-  width: 200px ;
+
+li {
+  width: 200px;
   height: 200px;
 
 }
-video{
+
+video {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+
+#button-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+
+.button {
+  width: 2rem;
+}
+
+.track-name-container {
+  position: relative;
+  top: 10%;
+}
+
+#track-name {
+  opacity: 0;
+}
+
+.trackPosition {
+  width: 100%;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  margin: 0;
+  margin-top: 0;
 }
