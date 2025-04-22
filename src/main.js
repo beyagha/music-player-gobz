@@ -43,10 +43,10 @@ class MusicPlayer {
     this.loadTrack();
     this.textAnimation();
     this.createMusic();
-    this.setupDraggable();
-    this.setUpImages();
-    this.updatePositions();
-    this.initScroll();
+    // this.setupDraggable();
+    // this.setUpImages();
+    // this.updatePositions();
+    // this.initScroll();
   }
   setUpImages() {
     this.allImages = document.querySelectorAll(".music-img");
@@ -54,12 +54,13 @@ class MusicPlayer {
     console.log(this.coverSize);
     console.log(this.allImages.length);
     this.containerSize = this.allImages.length * (this.gap + this.coverSize);
-    this.initialValue = this.coverSize+ this.gap
+    this.initialValue = this.coverSize + this.gap
 
     // array.forEach(i => {
 
     // });
   }
+
   updatePositions() {
     this.tracks.forEach((track, index) => {
       track.elementVideo.style.left = `${- this.initialValue + (index * ((this.coverSize + this.gap)+ this.scrollY + this.containerSize))%this.containerSize}px`
@@ -169,13 +170,14 @@ class MusicPlayer {
     this.isPlaying = true;
     this.trackVideo.src = this.tracks[this.currentTrackIndex].img
   }
-  setupDraggable() {
-    Draggable.create("#my-music-container", { type: "x" });
-  }
+  // setupDraggable() {
+  //   Draggable.create("#my-music-container", { type: "x" });
+  // }
   // onClickVideoStart(){
   //   const video = this.tracks[this.currentTrackIndex].img;
   //   video.play();
   // }
+
 }
 new MusicPlayer();
 
