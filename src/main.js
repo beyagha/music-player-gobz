@@ -1,5 +1,6 @@
 import { gsap } from "gsap";
 import Draggable from "gsap/Draggable";
+gsap.registerPlugin(SplitText);
 gsap.registerPlugin(Draggable);
 // gsap.registerPlugin(SplitText);
 class MusicPlayer {
@@ -43,10 +44,8 @@ class MusicPlayer {
     this.loadTrack();
     this.textAnimation();
     this.createMusic();
-    // this.setupDraggable();
-    // this.setUpImages();
-    // this.updatePositions();
-    // this.initScroll();
+    // this.onClickChangeSong();
+    this.splitTextAnim();
   }
   setUpImages() {
     this.allImages = document.querySelectorAll(".music-img");
@@ -55,10 +54,6 @@ class MusicPlayer {
     console.log(this.allImages.length);
     this.containerSize = this.allImages.length * (this.gap + this.coverSize);
     this.initialValue = this.coverSize + this.gap
-
-    // array.forEach(i => {
-
-    // });
   }
 
   updatePositions() {
@@ -104,11 +99,11 @@ class MusicPlayer {
   // }
   // }
   textAnimation() {
-    const tl = gsap.timeline({ delay: 0.5, repeat: -1 });
-    tl.to(this.trackTitle, { y: "10vh", duration: 1 });
-    tl.to(this.trackTitle, { duration: 2, opacity: 0 });
-    tl.to(this.trackName, { y: "10vh", duration: 1, opacity: 1 });
-    tl.to(this.trackName, { duration: 2, opacity: 0 });
+    // const tl = gsap.timeline({ delay: 0.5, repeat: -1 });
+    // tl.to(this.trackTitle, { y: "10vh", duration: 1 });
+    // tl.to(this.trackTitle, { duration: 2, opacity: 0 });
+    // tl.to(this.trackName, { y: "10vh", duration: 1, opacity: 1 });
+    // tl.to(this.trackName, { duration: 2, opacity: 0 });
 
 
 
@@ -122,7 +117,7 @@ class MusicPlayer {
     this.trackTitle = document.querySelector("#track-title");
     this.trackName = document.querySelector("#track-name");
     this.trackVideo = document.querySelector("#videoBg");
-
+    this.musicImg = document.querySelector(".music-img");
   }
 
   bindEvents() {
@@ -130,6 +125,7 @@ class MusicPlayer {
     this.nextButton.addEventListener("click", () => this.nextTrack());
     this.prevButton.addEventListener("click", () => this.prevTrack());
     this.audio.addEventListener("ended", () => this.nextTrack());
+    // this.musicImg.addEventListener("click", () => this.togglePlay());
   }
 
   loadTrack() {
@@ -170,13 +166,15 @@ class MusicPlayer {
     this.isPlaying = true;
     this.trackVideo.src = this.tracks[this.currentTrackIndex].img
   }
-  // setupDraggable() {
-  //   Draggable.create("#my-music-container", { type: "x" });
-  // }
-  // onClickVideoStart(){
-  //   const video = this.tracks[this.currentTrackIndex].img;
-  //   video.play();
-  // }
+  splitTextAnim(){
+  var split = new SplitText("#track-title",{type:"chars"});
+  
+  gsap.to(split.chars,{repeat: -1 ,
+    duration : 1,
+    y:100,
+    stagger:0.05,
+    yoyo : true});
+  }
 
 }
 new MusicPlayer();
