@@ -10,19 +10,20 @@
 
 <body>
     <div class="container">
-        <video id="videoBg" src="/public/webm/1.webm" autoplay loop></video>
+        <div class="flouBg"><video id="videoBg" src="/public/webm/1.webm" autoplay loop></video></div>
         <h1></h1>
         <div id="button-container">
-            <img class="button" id="prev" src="/public/button/button-prev.svg" alt="">
+            <img class="button" id="prev" src="/public/button/previous-icon-512x308-m1fp0mpw.png" alt="">
             <img class="button" id="play" src="/public/button/play-next-button.png" alt="">
-            <img class="button" id="next" src="/public/button/button-next.svg" alt="">
+            <img class="button" id="next" src="/public/button/next-icon-512x308-m1fp0mpw copie.png" alt="">
             
         </div>
         <div class="track-name-container">
-            <h2 class="trackPosition" id="track-title">Titre du morceau</h2>
-            <h2 class="trackPosition" id="track-name">Titre du morceau</h2>
+            <h2 class="trackPosition track-title">Titre du morceau</h2>
+            <h2 class="trackPosition track-name">Titre du morceau</h2>
         </div>
-        <ul id="playlist"></ul>
+        <ul id="playlist">
+        </ul>
         <ul id="my-music-container"></ul>
     </div>
     <script type="module" src="./src/main.js"></script>

@@ -39,13 +39,14 @@ class MusicPlayer {
   // Explication : Ici, on est en dehors du constructor, on y défini toutes les fonctions que la classe possède.
 
   init() {
+    this.createMusic();
     this.cacheDOM();
     this.bindEvents();
-    this.loadTrack();
-    this.textAnimation();
-    this.createMusic();
+    this.loadTrack()
+
     // this.onClickChangeSong();
     this.splitTextAnim();
+
   }
   setUpImages() {
     this.allImages = document.querySelectorAll(".music-img");
@@ -58,7 +59,7 @@ class MusicPlayer {
 
   updatePositions() {
     this.tracks.forEach((track, index) => {
-      track.elementVideo.style.left = `${- this.initialValue + (index * ((this.coverSize + this.gap)+ this.scrollY + this.containerSize))%this.containerSize}px`
+      track.elementVideo.style.left = `${- this.initialValue + (index * ((this.coverSize + this.gap) + this.scrollY + this.containerSize)) % this.containerSize}px`
 
     });
   }
@@ -71,6 +72,7 @@ class MusicPlayer {
     this.updatePositions();
   }
   createMusic() {
+
     let myMusicContainer = document.getElementById("my-music-container");
     let listVideos = [];
     for (let i = 0; i < this.tracks.length; i++) {
@@ -83,30 +85,11 @@ class MusicPlayer {
       myMusicContainer.appendChild(musicImg)
       musicImg.appendChild(musicVideo)
       this.tracks[i].elementVideo = musicImg
+
     }
     listVideos.forEach(element => {
       console.log(element);
     });
-  }
-  // changeTitleSongToName() {
-  //   // const title = document.getElementById('track-title');
-  //   let loop= true;
-  //   while (loop = true) {
-  //     this.trackTitle.innerHTML = this.tracks[this.currentTrackIndex].trackTitle;
-  //     setTimeout(function(){ title.innerHTML = this.tracks[this.currentTrackIndex].name; }, 2000);
-  //     setTimeout(function(){ title.innerHTML = this.tracks[this.currentTrackIndex].trackTitle; }, 4000);
-  //     ; 
-  // }
-  // }
-  textAnimation() {
-    // const tl = gsap.timeline({ delay: 0.5, repeat: -1 });
-    // tl.to(this.trackTitle, { y: "10vh", duration: 1 });
-    // tl.to(this.trackTitle, { duration: 2, opacity: 0 });
-    // tl.to(this.trackName, { y: "10vh", duration: 1, opacity: 1 });
-    // tl.to(this.trackName, { duration: 2, opacity: 0 });
-
-
-
   }
 
   cacheDOM() {
@@ -114,10 +97,10 @@ class MusicPlayer {
     this.playButton = document.querySelector("#play");
     this.nextButton = document.querySelector("#next");
     this.prevButton = document.querySelector("#prev");
-    this.trackTitle = document.querySelector("#track-title");
-    this.trackName = document.querySelector("#track-name");
+    this.trackTitle = document.querySelector(".track-title");
+    this.trackName = document.querySelector(".track-name");
     this.trackVideo = document.querySelector("#videoBg");
-    this.musicImg = document.querySelector(".music-img");
+    this.musicImgs = document.querySelectorAll(".music-img");
   }
 
   bindEvents() {
@@ -125,9 +108,29 @@ class MusicPlayer {
     this.nextButton.addEventListener("click", () => this.nextTrack());
     this.prevButton.addEventListener("click", () => this.prevTrack());
     this.audio.addEventListener("ended", () => this.nextTrack());
+    this.musicImgs.forEach((musicImg, index) => {
+      musicImg.addEventListener("click", (event) => this.handleClickVideo(event))
+      this.videoElement = musicImg.querySelector("video") 
+      this.videoElement.setAttribute("data-id", index)
+      console.log(this.videoElement)
+    });
     // this.musicImg.addEventListener("click", () => this.togglePlay());
   }
-
+  handleClickVideo(event) {
+    //recuperer la src 
+    //recup BG video
+    console.log(event.target)
+    let dataID = event.target.getAttribute("data-id")
+    this.currentTrackIndex = +dataID //transforme chaine de caractere en nombre
+    console.log(this.currentTrackIndex)
+    this.trackVideo.src = this.tracks[this.currentTrackIndex].img
+    
+    //changer le son
+    this.loadTrack();
+    this.audio.play();
+    this.isPlaying = true;
+    this.splitTextAnim();
+  }
   loadTrack() {
     if (this.currentTrackIndex < 0 || this.currentTrackIndex >= this.tracks.length) {
       console.error("Index de piste invalide");
@@ -157,6 +160,8 @@ class MusicPlayer {
     this.audio.play();
     this.isPlaying = true;
     this.trackVideo.src = this.tracks[this.currentTrackIndex].img
+    this.splitTextAnim();
+    console.log(this.currentTrackIndex)
   }
 
   prevTrack() {
@@ -165,15 +170,42 @@ class MusicPlayer {
     this.audio.play();
     this.isPlaying = true;
     this.trackVideo.src = this.tracks[this.currentTrackIndex].img
+    this.splitTextAnim();
   }
-  splitTextAnim(){
-  var split = new SplitText("#track-title",{type:"chars"});
-  
-  gsap.to(split.chars,{repeat: -1 ,
-    duration : 1,
-    y:100,
-    stagger:0.05,
-    yoyo : true});
+  splitTextAnim() {
+    var splitName = new SplitText(".track-name", { type: "chars" });
+    var splitTitle = new SplitText(".track-title", { type: "chars" });
+
+    //timeline
+    var tl = gsap.timeline({ repeat: -1 });
+    var animtextDebut = {
+      x: 0,
+      opacity: 1,
+      duration: 1,
+      ease: "expo",
+      stagger: 0.1,
+      repeat: 0
+    }
+    var animtextFin = {
+      x: -(window.innerWidth / 2 + this.trackName.clientWidth / 2),
+      opacity: 1,
+      duration: 1,
+      ease: "slow",
+      stagger: 0.1,
+      repeat: 0,
+      delay: 3
+    }
+    gsap.set(splitName.chars, {
+      x: window.innerWidth / 2 + this.trackName.clientWidth / 2
+    })
+    gsap.set(splitTitle.chars, {
+      x: window.innerWidth / 2 + this.trackTitle.clientWidth / 2
+    })
+    tl.to(splitTitle.chars, animtextDebut);
+    tl.to(splitTitle.chars, animtextFin);
+    tl.to(splitName.chars, animtextDebut);
+    tl.to(splitName.chars, animtextFin);
+
   }
 
 }
